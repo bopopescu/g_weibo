@@ -1,0 +1,13 @@
+
+[test]
+Django==1.8.0
+boto==2.48.0
+apache-libcloud==2.4.0
+Fabric3
+pylint
+isort
+flake8
+Sphinx
+sphinx-bootstrap-theme
+twine
+black
