@@ -41,6 +41,8 @@ class WeiboDetail(object):
         }
         self.repeat_times = 0
         self.num_before = 0
+        self.depth = 15
+        self.init_depth = 0
 
 
     def save_to_mongo(self):
@@ -260,6 +262,9 @@ class WeiboDetail(object):
         # return url_list
 
     def comment_crawler(self, url):
+        if self.init_depth > self.depth:
+            return
+        self.init_depth += 1
         if "sum_comment_number" in url:
             number_pattern = re.compile("sum_comment_number=([\d]+)")
             number = number_pattern.findall(url)[0]
@@ -305,6 +310,7 @@ class WeiboDetail(object):
 def fuck(number):
     # print("1")
     temp = WeiboDetail(number)
+    print("create class success")
     # temp.parse_comment_page("")
     temp.detail_crawler()
     sem.release()

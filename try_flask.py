@@ -19,7 +19,13 @@ def hello_world():
 def get():
     data = request.get_data()
     json_data = json.loads(data)
-    proxies = tools.get_proxy()
+    try:
+        proxies = tools.get_proxy()
+    except Exception as e:
+        print("*" * 100)
+        return json.dumps({
+            "type": "error",
+            "text": "proxy ip occur error"})
     # try:
     #     page = requests.get(json_data["url"], headers=json_data["headers"], proxies=proxies,
     #                         timeout=3)

@@ -1,6 +1,6 @@
 # coding:utf-8
 import socket
-
+import os
 if socket.gethostname() == "ISZ4DI1Z6MV6Z6K":
     import config
 else:
@@ -44,6 +44,7 @@ def detail_to_json(total_limit):
             #--------------------------------------------
             with open("detail_ori_%s.json" % time.strftime("%Y_%m_%d"), "ab+") as file:
                 if detail["content"] in ["转发图片.", "转发视频.", "", "分享图片","分享微博群","链接查看评论 ​​​​"] and (len(detail["comments"]) == 0):
+                    collection.delete_one({"url": detail["url"]})
                     continue
                 json_data = {
                     "url": detail["url"],
@@ -118,8 +119,9 @@ def parse_detail(detail):
 
             block["comments"].append(comment)
         else:
-            print(temp_comment)
-            print(comment)
+            # print(temp_comment)
+            # print(comment)
+            pass
     return block
 
 
@@ -160,6 +162,69 @@ def jiankong():
         print(total2)
     print(total1)
 
+def detail_to_json_big_small(total_limit):
+    limit = total_limit * 1024 * 1024 * 1024
+    print(limit)
+    # temp = open("detail_%s.json" % time.strftime("%Y_%m_%d"), "w")
+    # temp.close()
+    client = pymongo.MongoClient(config.MONGO_URL)
+    mongodb = client['weibo']
+    total1 = 0
+
+    for mongo_name in detail_list:
+        file_name = "detail_%s.json" % time.strftime("%Y_%m_%d")
+        try:
+            if os.path.getsize(file_name) > limit:
+                break
+        except Exception as e:
+            print(e)
+
+        total2 = 0
+        collection = mongodb[mongo_name]
+        details = collection.find({},no_cursor_timeout=True)
+        print("%s has %s" % (mongo_name, collection.count_documents({})))
+        for detail in details:
+            total1 += 1
+            total2 += 1
+            print(total2)
+            # if detail["url"] in url_list:
+            #     total2 += 1
+            # else:
+            #     url_list.append(detail["url"])
+            #--------------------------------------------
+            with open("detail_ori_%s.json" % time.strftime("%Y_%m_%d"), "ab+") as file:
+                if detail["content"] in ["转发图片.", "转发视频.", "", "分享图片","分享微博群","链接查看评论 ​​​​"] and (len(detail["comments"]) == 0):
+                    collection.delete_one({"url": detail["url"]})
+                    continue
+                json_data = {
+                    "url": detail["url"],
+                    "content": detail["content"],
+                    "comments": detail["comments"]
+                }
+                file.write(str(json_data).encode("utf8"))
+                file.write(b"\n")
+                collection.delete_one({"url":detail["url"]})
+            with open("detail_%s.json" % time.strftime("%Y_%m_%d"), "ab+") as file:
+                detail = parse_detail(detail)
+                if detail["content"] in ["转发图片.", "转发视频.", "", "分享图片","分享微博群","链接查看评论 ​​​​"]:
+                      detail["content"] = ""
+                if detail["content"] in ["转发图片.", "转发视频.", "", "分享图片","分享微博群","链接查看评论 ​​​​"] and (len(detail["comments"]) == 0):
+                    continue
+
+
+                json_data = {
+                    "url": detail["url"],
+                    "content": detail["content"],
+                    "comments": detail["comments"]
+                }
+                file.write(str(json_data).encode("utf8"))
+                if os.path.getsize(file_name) > limit:
+                    break
+                else:
+                    print(os.path.getsize(file_name))
+                file.write(b"\n")
+        print(total2)
+    print(total1)
 
 if __name__ == "__main__":
     # detail_to_json()
@@ -169,3 +234,7 @@ if __name__ == "__main__":
         detail_to_json(int(total_number))
     if str(sys.argv[1]) == "2":
         justTest()
+    if str(sys.argv[1]) == "3":
+        total_number = sys.argv[2]
+        detail_to_json_big_small(float(total_number))
+
