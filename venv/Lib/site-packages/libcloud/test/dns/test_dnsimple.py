@@ -60,7 +60,7 @@ class DNSimpleDNSTests(unittest.TestCase):
 
         zone1 = zones[0]
         self.assertEqual(zone1.id, '1')
-        self.assertEqual(zone1.type, 'master')
+        self.assertEqual(zone1.type, 'main')
         self.assertEqual(zone1.domain, 'example.com')
         self.assertEqual(zone1.ttl, 3600)
         self.assertHasKeys(zone1.extra, ['registrant_id', 'user_id',
@@ -72,7 +72,7 @@ class DNSimpleDNSTests(unittest.TestCase):
 
         zone2 = zones[1]
         self.assertEqual(zone2.id, '2')
-        self.assertEqual(zone2.type, 'master')
+        self.assertEqual(zone2.type, 'main')
         self.assertEqual(zone2.domain, 'example.com')
         self.assertEqual(zone2.ttl, 3600)
         self.assertHasKeys(zone2.extra, ['registrant_id', 'user_id',
@@ -114,7 +114,7 @@ class DNSimpleDNSTests(unittest.TestCase):
     def test_get_zone_success(self):
         zone1 = self.driver.get_zone(zone_id='1')
         self.assertEqual(zone1.id, '1')
-        self.assertEqual(zone1.type, 'master')
+        self.assertEqual(zone1.type, 'main')
         self.assertEqual(zone1.domain, 'example.com')
         self.assertEqual(zone1.ttl, 3600)
         self.assertHasKeys(zone1.extra, ['registrant_id', 'user_id',
@@ -140,7 +140,7 @@ class DNSimpleDNSTests(unittest.TestCase):
         self.assertEqual(zone.id, '1')
         self.assertEqual(zone.domain, 'example.com')
         self.assertEqual(zone.ttl, 3600)
-        self.assertEqual(zone.type, 'master')
+        self.assertEqual(zone.type, 'main')
         self.assertHasKeys(zone.extra, ['registrant_id', 'user_id',
                                         'unicode_name', 'token', 'state',
                                         'language', 'lockable', 'auto_renew',

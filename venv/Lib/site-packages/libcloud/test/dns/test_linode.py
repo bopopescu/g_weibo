@@ -50,7 +50,7 @@ class LinodeTests(unittest.TestCase):
 
         zone = zones[0]
         self.assertEqual(zone.id, '5093')
-        self.assertEqual(zone.type, 'master')
+        self.assertEqual(zone.type, 'main')
         self.assertEqual(zone.domain, 'linode.com')
         self.assertEqual(zone.ttl, None)
         self.assertHasKeys(zone.extra, ['description', 'SOA_Email', 'status'])
@@ -93,7 +93,7 @@ class LinodeTests(unittest.TestCase):
 
         zone = self.driver.get_zone(zone_id='5093')
         self.assertEqual(zone.id, '5093')
-        self.assertEqual(zone.type, 'master')
+        self.assertEqual(zone.type, 'main')
         self.assertEqual(zone.domain, 'linode.com')
         self.assertEqual(zone.ttl, None)
         self.assertHasKeys(zone.extra, ['description', 'SOA_Email', 'status'])
@@ -140,7 +140,7 @@ class LinodeTests(unittest.TestCase):
             self.fail('Exception was not thrown')
 
     def test_create_zone_success(self):
-        zone = self.driver.create_zone(domain='foo.bar.com', type='master',
+        zone = self.driver.create_zone(domain='foo.bar.com', type='main',
                                        ttl=None, extra=None)
         self.assertEqual(zone.id, '5094')
         self.assertEqual(zone.domain, 'foo.bar.com')
@@ -149,7 +149,7 @@ class LinodeTests(unittest.TestCase):
         LinodeMockHttp.type = 'VALIDATION_ERROR'
 
         try:
-            self.driver.create_zone(domain='foo.bar.com', type='master',
+            self.driver.create_zone(domain='foo.bar.com', type='main',
                                     ttl=None, extra=None)
         except LinodeException:
             pass

@@ -33,7 +33,7 @@ class VultrTests(unittest.TestCase):
         VultrMockHttp.type = None
         VultrDNSDriver.connectionCls.conn_class = VultrMockHttp
         self.driver = VultrDNSDriver(*VULTR_PARAMS)
-        self.test_zone = Zone(id='test.com', type='master', ttl=None,
+        self.test_zone = Zone(id='test.com', type='main', ttl=None,
                               domain='test.com', extra={}, driver=self)
         self.test_record = Record(id='31', type=RecordType.A, name='test',
                                   zone=self.test_zone, data='127.0.0.1',
@@ -51,25 +51,25 @@ class VultrTests(unittest.TestCase):
 
         zone = zones[0]
         self.assertEqual(zone.id, 'example.com')
-        self.assertEqual(zone.type, 'master')
+        self.assertEqual(zone.type, 'main')
         self.assertEqual(zone.domain, 'example.com')
         self.assertEqual(zone.ttl, None)
 
         zone = zones[1]
         self.assertEqual(zone.id, 'zupo.com')
-        self.assertEqual(zone.type, 'master')
+        self.assertEqual(zone.type, 'main')
         self.assertEqual(zone.domain, 'zupo.com')
         self.assertEqual(zone.ttl, None)
 
         zone = zones[2]
         self.assertEqual(zone.id, 'oltjano.com')
-        self.assertEqual(zone.type, 'master')
+        self.assertEqual(zone.type, 'main')
         self.assertEqual(zone.domain, 'oltjano.com')
         self.assertEqual(zone.ttl, None)
 
         zone = zones[3]
         self.assertEqual(zone.id, '13.com')
-        self.assertEqual(zone.type, 'master')
+        self.assertEqual(zone.type, 'main')
         self.assertEqual(zone.domain, '13.com')
         self.assertEqual(zone.ttl, None)
 
@@ -89,7 +89,7 @@ class VultrTests(unittest.TestCase):
 
         self.assertEqual(zone.id, 'zupo.com')
         self.assertEqual(zone.domain, 'zupo.com')
-        self.assertEqual(zone.type, 'master')
+        self.assertEqual(zone.type, 'main')
         self.assertEqual(zone.ttl, None)
 
     def test_delete_zone_zone_does_not_exist(self):
@@ -115,7 +115,7 @@ class VultrTests(unittest.TestCase):
 
         self.assertEqual(zone.id, 'test.com')
         self.assertEqual(zone.domain, 'test.com')
-        self.assertEqual(zone.type, 'master'),
+        self.assertEqual(zone.type, 'main'),
         self.assertEqual(zone.ttl, None)
 
     def test_create_zone_zone_already_exists(self):
